@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Cape
+    uniqueID: 3057137807
+    locked: 0
+  - name: PlayerBody
+    uniqueID: 3832730517
+    locked: 0
