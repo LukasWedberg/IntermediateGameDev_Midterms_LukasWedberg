@@ -27,7 +27,7 @@ public class BagGrabber : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.transform.parent != null) {
-            if (col.gameObject.transform.parent.gameObject.name == "Robin Dood" && tether.enabled == false)
+            if (col.gameObject.transform.parent.gameObject.name == "Better Robin Dood" && tether.enabled == false)
             {
                 Debug.Log("BUBUBBUBUBUB");
 
