@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Retractor : MonoBehaviour
 {
-    public bool retracted = false;
+    public bool retracted;
 
     Rigidbody2D myBody;
 
     Rigidbody2D ropeHolderBody;
 
-    float retractionLerpSpeed = 4f;
+    public float retractionLerpSpeed = 4f;
 
     LineRenderer lineRend;
 
@@ -35,35 +36,42 @@ public class Retractor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (SceneManager.GetActiveScene().name == "Level")
         {
 
-            if (retracted == false)
-            {
-                retracted = true;
 
-                SoundManager.source.PlayOneShot(SoundManager.soundEffects[2]);
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+
+                if (retracted == false)
+                {
+                    retracted = true;
+
+                    SoundManager.source.PlayOneShot(SoundManager.soundEffects[2]);
+                }
+
+                //transform.position = new Vector3(transform.position.x, 45f, 0);
+
+                ropeHolderBody.isKinematic = true;
+
+
+
+            }
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (retracted == true)
+                {
+                    retracted = false;
+
+                    SoundManager.source.PlayOneShot(SoundManager.soundEffects[3]);
+                }
+
+                //transform.position = new Vector3(transform.position.x, 18.4f, 0);
+
+                ropeHolderBody.isKinematic = false;
             }
 
-            //transform.position = new Vector3(transform.position.x, 45f, 0);
-
-            ropeHolderBody.isKinematic = true;
-
-
-
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            if (retracted == true)
-            {
-                retracted = false;
-
-                SoundManager.source.PlayOneShot(SoundManager.soundEffects[3]);
-            }
-
-            //transform.position = new Vector3(transform.position.x, 18.4f, 0);
-
-            ropeHolderBody.isKinematic = false;
         }
 
         if (retracted)

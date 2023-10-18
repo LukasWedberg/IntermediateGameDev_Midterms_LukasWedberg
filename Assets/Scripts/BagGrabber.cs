@@ -12,16 +12,72 @@ public class BagGrabber : MonoBehaviour
     [SerializeField]
     GameObject victory;
 
+    [SerializeField]
+    GameObject tutorialButtons;
+
+    [SerializeField]
+    GameObject bagBarrier;
+
+
+    GameObject robinDood;
+
+    LineRenderer lineRend;
+
+    Vector3[] ropeSegments = new Vector3[2];
+
+
+    public float castDist = 1.5f;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         tether = GetComponent<SpringJoint2D>();
+
+        lineRend = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (tether.enabled) {
+
+            ropeSegments[0] = transform.position;
+            ropeSegments[1] = robinDood.transform.position;
+
+            lineRend.positionCount = ropeSegments.Length;
+            lineRend.SetPositions(ropeSegments);
+        }
+
+
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, castDist);
+        Debug.DrawRay(transform.position, Vector2.down * castDist, Color.red);
+
+        if (hit.collider != null && hit.transform.name == "Flatbed")
+        {
+            if (tether.enabled)
+            {
+                //Drop the bag on the platform, disable tether
+                tether.enabled = false;
+
+                //set the front wheel to "dynamic" body type instead of "isKinematic" so that the cart can roll away
+                hit.transform.parent.GetChild(1).GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+                WheelJoint2D drivingWheel = hit.transform.GetComponent<WheelJoint2D>();
+
+                drivingWheel.useMotor = true;
+
+                Destroy(bagBarrier);
+
+                lineRend.positionCount = 0;
+
+                GameManager.victoryAchieved = true;
+
+            }
+        }
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -34,8 +90,20 @@ public class BagGrabber : MonoBehaviour
                 tether.enabled = true;
 
                 tether.connectedBody = col.rigidbody;
+
+                robinDood = col.gameObject;
+
+                SoundManager.source.PlayOneShot(SoundManager.soundEffects[5]);
+
+                Destroy(tutorialButtons);
+
+
             }
-            else if (col.gameObject.transform.parent.gameObject.name == "Carriage")
+            
+            
+            /*
+            else
+            if (col.gameObject.transform.parent.gameObject.name == "Carriage")
             {
 
 
@@ -48,7 +116,14 @@ public class BagGrabber : MonoBehaviour
                 timerObject.SetActive(false);
 
             }
+            */
+
+
+
         }
+
+        
+
     }
 
 }

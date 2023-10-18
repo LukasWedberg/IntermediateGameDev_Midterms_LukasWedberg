@@ -85,6 +85,9 @@ public class BetterGroundSensor : MonoBehaviour
         else
         {
             currentlyGrounded = false;
+            headBonked = false;
+            bonkSoundPlayed = false;
+
         }
 
         
