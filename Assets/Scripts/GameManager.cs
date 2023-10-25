@@ -29,10 +29,16 @@ public class GameManager : MonoBehaviour
 
     float shroudFadeSpeed = 1f;
 
+    public static string timeStoppedAt;
+
+    [SerializeField]
+    AudioSource sillyMusic;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        victoryAchieved = false;
+        gameOver = false;
     }
 
     // Update is called once per frame
@@ -54,7 +60,18 @@ public class GameManager : MonoBehaviour
                     extraZero = "0";
                 }
 
-                timeRemainingUI.text = (Mathf.Ceil((timeAllowed + 1) / 60) - 1).ToString() + " : " + extraZero + (Mathf.Ceil(timeAllowed) % 60).ToString();
+                string firstPart = " ";
+
+                if ((Mathf.Ceil((timeAllowed + 1) / 60) - 1) > 0)
+                {
+                    firstPart = (Mathf.Ceil((timeAllowed + 1) / 60) - 1).ToString();
+                }
+
+                timeRemainingUI.text = firstPart + " : " + extraZero + (Mathf.Ceil(timeAllowed) % 60).ToString();
+            }
+            else if(victoryAchieved == true)
+            {
+                sillyMusic.volume = Mathf.Lerp(sillyMusic.volume,0, 0.2f * Time.deltaTime);
             }
         }
         else
@@ -87,6 +104,8 @@ public class GameManager : MonoBehaviour
 
             if (shroudAlpha > .999)
             {
+                timeStoppedAt = timeRemainingUI.text;
+
                 SceneManager.LoadScene("Happy Ending");
             }
         }

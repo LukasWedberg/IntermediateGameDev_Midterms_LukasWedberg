@@ -25,8 +25,15 @@ public class BagGrabber : MonoBehaviour
 
     Vector3[] ropeSegments = new Vector3[2];
 
+    Rigidbody2D myRB;
+
+    [SerializeField]
+    ParticleSystem coins;
+
 
     public float castDist = 1.5f;
+
+    bool flatbedResting = false;
 
 
 
@@ -37,6 +44,8 @@ public class BagGrabber : MonoBehaviour
         tether = GetComponent<SpringJoint2D>();
 
         lineRend = GetComponent<LineRenderer>();
+
+        myRB = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -70,19 +79,27 @@ public class BagGrabber : MonoBehaviour
 
                 drivingWheel.useMotor = true;
 
-                Destroy(bagBarrier);
+                //Destroy(bagBarrier);
 
                 lineRend.positionCount = 0;
 
                 GameManager.victoryAchieved = true;
 
             }
+
+            flatbedResting = true;
+            myRB.angularVelocity /= 1.5f;
+            
+        }
+        else
+        {
+            flatbedResting = false;
         }
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.transform.parent != null) {
+        if (col.gameObject.transform.parent != null && !flatbedResting) {
             if (col.gameObject.transform.parent.gameObject.name == "Better Robin Dood" && tether.enabled == false)
             {
                 Debug.Log("BUBUBBUBUBUB");
@@ -98,6 +115,11 @@ public class BagGrabber : MonoBehaviour
                 Destroy(tutorialButtons);
 
 
+            }
+            else if (col.gameObject.tag == "Ground" && tether.enabled)
+            {
+                coins.Play();
+                SoundManager.source.PlayOneShot(SoundManager.soundEffects[6]);
             }
             
             

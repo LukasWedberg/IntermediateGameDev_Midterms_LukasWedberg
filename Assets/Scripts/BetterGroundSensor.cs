@@ -101,6 +101,8 @@ public class BetterGroundSensor : MonoBehaviour
                 bonkSoundPlayed = true;
 
                 SoundManager.source.PlayOneShot(SoundManager.soundEffects[4]);
+
+                BPCounter.AddPoint();
             }
 
             if (landingCooldownTimer > 0)

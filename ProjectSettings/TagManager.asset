@@ -14,8 +14,8 @@ TagManager:
   - UI
   - BagBarrier
   - Bag
-  - 
-  - 
+  - Flatbed
+  - Wheels
   - 
   - 
   - 
@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 983193691
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
